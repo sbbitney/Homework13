@@ -3,30 +3,24 @@ var tableData = data;
 
 
 
-function filterDataByDate(dataArray) {
-  // grab the date time that we have stored in the browser
-  const date = localStorage.getItem("datetime");
-
+function filterDataByDate(dataArray, date) {
+  
   // use the Array.filter method to filter out any sightings that don't match the date we want
-   return dataArray.filter((dataObject) => { 
-
-     // if a date is present
-     if (date) {
-
-       // check to see if the sighting's date matches our filter date, and return that sighting if so
-       return dataObject.datetime === date;
-
-     // otherwise return the sighting
-     } else {
-       return data;
-     }
+  return dataArray.filter((dataObject) => { 
+    // check to see if the sighting's date matches our filter date, and return that sighting if so
+    return dataObject.datetime === date;
   });
 }
 
 function createTable(sightings) {
-
-  // filter sightings by date
-  sightings = filterDataByDate(sightings);
+  
+  // grab the date time that we have stored in the browser
+  const date = localStorage.getItem("datetime");
+  
+  // if a date is present filter sightings by date
+  if (date) {
+    sightings = filterDataByDate(sightings, date);
+  }
 
   // grab the <tbody id="table-body"> element from index.html
   const tableBod = document.getElementById("table-body");
@@ -41,9 +35,13 @@ function createTable(sightings) {
     // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys which explains Object.keys()
     const sightingKeys = Object.keys(sighting);
 
+    // this is an alternate way of iterating over an object
+    // for (let key in sighting) {
+    //   console.log(sighting[key]);
+    // }
+
     // iterate through the array of sighting keys
     sightingKeys.forEach((sightingKey) => {
-
       // create a <td> (table data) element
       const tableData = document.createElement("td");
 
